@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
 //config
-dotenv.config({ path: "backend/config/config.env" });
+dotenv.config({ path: "config/config.env" });
 const config = process.env.MONGO_URI;
 
 const db = config || "mongodb://localhost:27017/Candidate-Management";
