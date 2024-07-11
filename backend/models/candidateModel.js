@@ -12,11 +12,22 @@ const documentSchema = new mongoose.Schema({
         required: [true, "Please specify the file type"],
         enum: ['image', 'pdf'],
     },
-    file: {
-        type: Buffer, // Assuming the file will be stored as binary data
+    fileUrl: {
+        type: String, // URL to the file on Cloudinary
         required: [true, "Please upload the file"],
     }
 });
+
+const addressSchema = new mongoose.Schema({
+    street1: {
+        type: String,
+        required: [true, "Please enter street1"]
+    },
+    street2: {
+        type: String,
+        required: [true, "Please enter street2"]
+    }
+}, { _id: false });
 
 // Candidate schema
 const candidateSchema = new mongoose.Schema({
@@ -32,75 +43,54 @@ const candidateSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please enter your email"],
         unique: true,
-        validate: [validator.isEmail, "Please enter a valid email"],
+        match: [
+            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+            "Please add a valid email address",
+        ],
     },
     dateOfBirth: {
         type: Date,
         required: [true, "Please enter your date of birth"],
         validate: {
-            validator: function(value) {
+            validator: function (value) {
                 const ageDiff = Date.now() - value.getTime();
                 const ageDate = new Date(ageDiff);
                 return Math.abs(ageDate.getUTCFullYear() - 1970) >= 18;
             },
-            message: "Age must be at least 18 years"
-        }
+            message: "Age must be at least 18 years",
+        },
     },
     address: {
-        street1: {
-            type: String,
-            required: [true, "Please enter your residential street address"],
-        },
-        street2: {
-            type: String,
-        },
-        city: {
-            type: String,
-            required: [true, "Please enter your city"],
-        },
-        state: {
-            type: String,
-            required: [true, "Please enter your state"],
-        },
-        zip: {
-            type: String,
-            required: [true, "Please enter your zip code"],
-        }
+        type: addressSchema,
+        required: [true, "Please enter your address"],
     },
     sameAsResidential: {
         type: Boolean,
-        default: false,
+        required: [true, "Please specify if permanent address is the same as residential address"],
     },
     permanentAddress: {
-        street1: {
-            type: String,
-            required: function() { return !this.sameAsResidential; },
+        type: addressSchema,
+        required: function() {
+            return !this.sameAsResidential;
         },
-        street2: {
-            type: String,
-        },
-        city: {
-            type: String,
-            required: function() { return !this.sameAsResidential; },
-        },
-        state: {
-            type: String,
-            required: function() { return !this.sameAsResidential; },
-        },
-        zip: {
-            type: String,
-            required: function() { return !this.sameAsResidential; },
-        }
-    },
-    documents: {
-        type: [documentSchema],
         validate: {
             validator: function(value) {
-                return value.length >= 2;
+                if (this.sameAsResidential) {
+                    return true; // Skip validation if sameAsResidential is true
+                }
+                return value && value.street1 && value.street2; // Validate only if sameAsResidential is false
             },
-            message: "At least two documents are required"
+            message: "Permanent address is required when it is not the same as residential address"
         }
-    }
+    },
+    documents: [
+        {
+            fileName: String,
+            fileType: String,
+            fileUrl: String,
+        },
+    ],
 });
+
 
 module.exports = mongoose.model("Candidate", candidateSchema);
