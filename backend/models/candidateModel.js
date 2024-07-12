@@ -18,14 +18,11 @@ const documentSchema = new mongoose.Schema({
     }
 });
 
+// Address schema
 const addressSchema = new mongoose.Schema({
-    street1: {
+    address: {
         type: String,
-        required: [true, "Please enter street1"]
-    },
-    street2: {
-        type: String,
-        required: [true, "Please enter street2"]
+        required: [true, "Please enter your address"]
     }
 }, { _id: false });
 
@@ -78,19 +75,12 @@ const candidateSchema = new mongoose.Schema({
                 if (this.sameAsResidential) {
                     return true; // Skip validation if sameAsResidential is true
                 }
-                return value && value.street1 && value.street2; // Validate only if sameAsResidential is false
+                return value && value.address; // Validate only if sameAsResidential is false
             },
             message: "Permanent address is required when it is not the same as residential address"
         }
     },
-    documents: [
-        {
-            fileName: String,
-            fileType: String,
-            fileUrl: String,
-        },
-    ],
+    documents: [documentSchema],
 });
-
 
 module.exports = mongoose.model("Candidate", candidateSchema);

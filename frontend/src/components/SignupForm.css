@@ -1,0 +1,92 @@
+.signup-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-form h2, .signup-form h3 {
+    text-align: center;
+}
+
+.signup-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-form label {
+    margin-bottom: 10px;
+}
+
+.signup-form input, .signup-form textarea, .signup-form button, .signup-form select {
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.signup-form .document-fields {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.signup-form .document-fields label {
+    margin-bottom: 5px;
+}
+
+.signup-form .add-button, .signup-form .delete-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+.signup-form .delete-button {
+    background-color: #dc3545;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.signup-form button[type="submit"] {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.signup-form button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+.message {
+    text-align: center;
+    color: red;
+    font-weight: bold;
+}
+
+.candidate-details {
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+}
+
+.candidate-details h3 {
+    text-align: center;
+}
+
+.candidate-details p, .candidate-details ul {
+    margin: 5px 0;
+}
