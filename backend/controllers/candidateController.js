@@ -6,12 +6,12 @@ const Candidate = require('../models/candidateModel');
 // Signup Controller
 exports.signUp = catchAsyncErrors(async (req, res, next) => {
     upload.array('documents', 2)(req, res, async function (err) {
+        console.log("req",req)
         if (err) {
             return next(new ErrorHandler(err.message, 500));
         }
 
         try {
-            console.log(req.body, "files", req.file)
             const {
                 firstName,
                 lastName,
@@ -31,9 +31,7 @@ exports.signUp = catchAsyncErrors(async (req, res, next) => {
                 fileName: file.originalname,
                 fileType: file.mimetype.includes('pdf') ? 'pdf' : 'image',
                 fileUrl: file.path
-                
             }));
-            console.log("first,",documents)
 
             if (documents.length < 2) {
                 return next(new ErrorHandler("At least two documents are required", 400));
@@ -44,9 +42,9 @@ exports.signUp = catchAsyncErrors(async (req, res, next) => {
                 lastName,
                 email,
                 dateOfBirth: parsedDateOfBirth,
-                address: { address }, // Adjusted to fit new schema
+                address,
                 sameAsResidential: JSON.parse(sameAsResidential),
-                permanentAddress: JSON.parse(sameAsResidential) ? { address } : { address: permanentAddress }, // Adjusted to fit new schema
+                permanentAddress: JSON.parse(sameAsResidential) ? address : permanentAddress,
                 documents
             };
 
@@ -62,6 +60,7 @@ exports.signUp = catchAsyncErrors(async (req, res, next) => {
         }
     });
 });
+
 
 
 // Update Profile Controller

@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
 
 // Document schema
 const documentSchema = new mongoose.Schema({
@@ -17,14 +16,6 @@ const documentSchema = new mongoose.Schema({
         required: [true, "Please upload the file"],
     }
 });
-
-// Address schema
-const addressSchema = new mongoose.Schema({
-    address: {
-        type: String,
-        required: [true, "Please enter your address"]
-    }
-}, { _id: false });
 
 // Candidate schema
 const candidateSchema = new mongoose.Schema({
@@ -58,7 +49,7 @@ const candidateSchema = new mongoose.Schema({
         },
     },
     address: {
-        type: addressSchema,
+        type: String, // Changed to simple String type
         required: [true, "Please enter your address"],
     },
     sameAsResidential: {
@@ -66,7 +57,7 @@ const candidateSchema = new mongoose.Schema({
         required: [true, "Please specify if permanent address is the same as residential address"],
     },
     permanentAddress: {
-        type: addressSchema,
+        type: String, // Changed to simple String type
         required: function() {
             return !this.sameAsResidential;
         },
@@ -75,7 +66,7 @@ const candidateSchema = new mongoose.Schema({
                 if (this.sameAsResidential) {
                     return true; // Skip validation if sameAsResidential is true
                 }
-                return value && value.address; // Validate only if sameAsResidential is false
+                return !!value; // Validate only if sameAsResidential is false and value is not empty
             },
             message: "Permanent address is required when it is not the same as residential address"
         }
